@@ -2,8 +2,10 @@ package movies.bean;
 
 import java.util.Date;
 
+import static movies.run.SystemMovie.sdf;
+
 public class Movie {
-    private String id;
+
     private String name;
     private String actor;
     private Double score;
@@ -15,38 +17,30 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String id, String name, String actor, Double score, Double time, Double price, Integer number, Date start_time) {
-        this.id = id;
+    public Movie( String name, String actor, Double time, Double price, Integer number, Date start_time) {
         this.name = name;
         this.actor = actor;
-        this.score = score;
         this.time = time;
         this.price = price;
         this.number = number;
         this.start_time = start_time;
     }
 
+
+
     @Override
     public String toString() {
         return "Movie{" +
-                "id='" + id + '\'' +
                 "name='" + name + '\'' +
                 ", actor='" + actor + '\'' +
                 ", score=" + score +
                 ", time=" + time +
                 ", price=" + price +
                 ", number=" + number +
-                ", start_time=" + start_time +
+                ", start_time=" + sdf.format(start_time)+
                 '}';
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
