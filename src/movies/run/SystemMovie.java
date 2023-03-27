@@ -15,7 +15,7 @@ public class SystemMovie {
     public static final List<User> ALL_USERS = new ArrayList<>();
     public static Map<Business,Set<Movie>> ALL_MOVIES = new HashMap<>();
     public static final Scanner SCInput = new Scanner(System.in);
-    public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss");
+    public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //静态正在登录对象
     public static User LoginUser;
     public static final Logger LOGGER = LoggerFactory.getLogger("SystemMovie.class");
@@ -132,7 +132,7 @@ public class SystemMovie {
             System.out.println("输入需要的功能：");
             String command = SCInput.nextLine();
             switch (command){
-                case "1" :
+                case "1" :showAllMovies();
                     break;
                 case "2" :
                     break;
@@ -140,7 +140,7 @@ public class SystemMovie {
                     break;
                 case "4" :
                     break;
-                case "5" :
+                case "5" : buyMovie();
                     break;
                 case "6" :
                     return;
@@ -150,6 +150,95 @@ public class SystemMovie {
             }
         }
     }
+
+    private static void buyMovie() {
+        while (true) {
+            System.out.println("============buyMovie===============");
+            Client LoginClient = (Client) LoginUser;
+            while (true) {
+                System.out.println("输入要在哪家影院购买");
+                String shopName = SCInput.nextLine();
+                Business business = getBusinessByShopName(shopName);
+                if(business == null) {
+                    System.out.println("对不起，没有该店铺！请确认");
+                }
+                else {
+                    while (true){
+                        System.out.println("输入要购买的电影名称");
+                        String input = SCInput.nextLine();
+                        Movie movie = getMovieByShopAndName(business,input);
+                        if(movie == null) {
+                            System.out.println("没有要购买的电影");
+                        }else {
+                            while (true) {
+                                System.out.println("输入要购买的数量");
+                                String s_count = SCInput.nextLine();
+                                Integer count = Integer.valueOf(s_count);
+                                Double sellingPrice = count * movie.getPrice();
+                                Double money = LoginClient.getAccount_amount();
+                                Integer Remaining = movie.getNumber();
+                                if(sellingPrice <= money) {
+                                    if(Remaining >= count){
+                                        LoginClient.setAccount_amount(money-sellingPrice);
+                                        business.setAccount_amount(business.getAccount_amount() + money);
+                                        movie.setNumber(Remaining-count);
+                                        System.out.println("购买"+movie.getName()+count+"张"+"成功");
+                                        break;
+                                    }
+                                   else {
+                                     System.out.println("余票不足");
+                                   }
+                                }
+                                else {
+                                    System.out.println("余额不足");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static Movie getMovieByShopAndName(Business business,String name) {
+        Set<Movie> movies = ALL_MOVIES.get(business);
+        for (Movie movie : movies) {
+            if(movie.getName().contains(name)){
+                return movie;
+            }
+        }
+        return null;
+    }
+
+    public static Business getBusinessByShopName(String shopName){
+        Set<Business> businesses = ALL_MOVIES.keySet();
+        for (Business business : businesses) {
+            if(business.getShop_name().equals(shopName)){
+                return  business;
+            }
+        }
+        return null;
+    }
+    private static Set<Movie> getShopByName(String shopName) {
+        Set<Movie> movies = ALL_MOVIES.get(shopName);
+        if(movies!=null) {
+            return movies;
+        }else {
+            System.out.println("商家无影片");
+            return null;
+        }
+    }
+
+    private static void showAllMovies() {
+        System.out.println("=============showAllMovies================");
+        ALL_MOVIES.forEach((business, movies) -> {
+            System.out.println(business);
+            for (Movie movie : movies) {
+                System.out.println(movie);
+            }
+        });
+    }
+
     //商家菜单
     public static void showBusinessMenu(){
         System.out.println("===============BusinessMenu====================");
@@ -166,20 +255,15 @@ public class SystemMovie {
         while (true){
             System.out.println("输入需要的功能：");
             String command = SCInput.nextLine();
-            switch (command){
-                case "1" :ShowBusinessMovie();
-                    break;
-                case "2" :addMovie();
-                    break;
-                case "3" :deleteMovie();
-                    break;
-                case "4" :updateMovie();
-                    break;
-                case "5" :
+            switch (command) {
+                case "1" -> ShowBusinessMovie();
+                case "2" -> addMovie();
+                case "3" -> deleteMovie();
+                case "4" -> updateMovie();
+                case "5" -> {
                     return;
-                default:
-                    System.out.println("不存在");
-                    break;
+                }
+                default -> System.out.println("不存在");
             }
         }
     }
@@ -283,7 +367,7 @@ public class SystemMovie {
             return;
         }
 
-        // 2、让用户选择需要下架的电影名称
+        // 2、让用户选择需要修改的电影名称
         while (true) {
             System.out.println("请您输入需要修改的电影名称：");
             String movieName = SCInput.nextLine();

@@ -4,6 +4,13 @@ public class Business extends User{
     private String address;
     private String shop_name;
 
+    @Override
+    public String toString() {
+        return "Business{" +
+                "address='" + address + '\'' +
+                ", shop_name='" + shop_name + '\'' +
+                '}';
+    }
 
     public String getAddress() {
         return address;
