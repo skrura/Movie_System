@@ -442,7 +442,7 @@ public class SystemMovie {
         String patternLoginName = "\\w{8,}";
         String patternPassword = "\\w{6,}";
         String patternSex = "男|女";
-        String patternnumber = "\\d{8,}";
+        String patternNumber = "\\d{8,}";
         while (true) {
             System.out.println("输入要注册的用户名称(字母下划线组成至少8位)");
             String loginName = SCInput.nextLine();
@@ -462,10 +462,10 @@ public class SystemMovie {
                                     while (true) {
                                         System.out.println("输入联系号码");
                                         String number = SCInput.nextLine();
-                                        if(number.matches(patternnumber)){
+                                        if(number.matches(patternNumber)){
                                             System.out.println("充值账户金额");
                                             String money = SCInput.nextLine();
-                                            User client = new User(loginName,realName,password,csex,number,Double.valueOf(money));
+                                            User client = new Client(loginName,realName,password,csex,number,Double.valueOf(money));
                                             ALL_USERS.add(client);
                                             System.out.println("创建"+loginName+"成功");
                                             return;
@@ -493,6 +493,68 @@ public class SystemMovie {
 
     }
     public static void enrollBusiness(){
+        String patternLoginName = "\\w{8,}";
+        String patternPassword = "\\w{6,}";
+        String patternSex = "男|女";
+        String patternNumber = "\\d{8,}";
+        while (true) {
+            System.out.println("输入要注册的用户名称(字母下划线组成至少8位)");
+            String loginName = SCInput.nextLine();
+            if(loginName.matches(patternLoginName)){
+                if(getUserByLoginName(loginName)==null){
+                    while (true) {
+                        System.out.println("输入密码(字母下划线组成至少6位)");
+                        String password = SCInput.nextLine();
+                        if(password.matches(patternPassword)){
+                            System.out.println("输入真实姓名");
+                            String realName = SCInput.nextLine();
+                            while (true) {
+                                System.out.println("输入商店名称");
+                                String shopName = SCInput.nextLine();
+                                if (getBusinessByShopName(shopName)!=null) {
+                                    while (true) {
+                                        System.out.println("输入性别");
+                                        String sex = SCInput.nextLine();
+                                        if(sex.matches(patternSex)){
+                                            Character csex = sex.charAt(0);
+                                            while (true) {
+                                                System.out.println("输入联系号码");
+                                                String number = SCInput.nextLine();
+                                                System.out.println("输入地址");
+                                                String address = SCInput.nextLine();
+                                                if(number.matches(patternNumber)){
+                                                    System.out.println("充值账户金额");
+                                                    String money = SCInput.nextLine();
+                                                    User business = new Business(loginName,realName,password,csex,number,Double.valueOf(money),address,shopName);
+                                                    ALL_USERS.add(business);
+                                                    System.out.println("创建"+loginName+"成功");
+                                                    return;
+                                                }else {
+                                                    System.out.println("号码不符合条件");
+                                                }
+                                            }
+                                        }else {
+                                            System.out.println("性别不符合条件");
+                                        }
+                                    }
+                                }
+                                else {
+                                    System.out.println("商店名称重复");
+                                }
+                            }
+
+                        }else {
+                            System.out.println("密码不符合条件");
+                        }
+                    }
+
+                }else {
+                    System.out.println("登录名称重复");
+                }
+            }else {
+                System.out.println("登录名称不符合条件");
+            }
+        }
 
     }
     public static User getUserByLoginName(String loginName){

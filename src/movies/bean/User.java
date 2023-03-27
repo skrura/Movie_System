@@ -1,12 +1,12 @@
 package movies.bean;
 
 public class User {
-    private String login_name;
-    private String real_name;
-    private String password;
-    private Character gender;
-    private String telephone_number;
-    private Double account_amount;
+    protected String login_name;
+    protected String real_name;
+    protected String password;
+    protected Character gender;
+    protected String telephone_number;
+    protected Double account_amount;
 
     public User() {
     }

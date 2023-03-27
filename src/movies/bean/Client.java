@@ -4,14 +4,14 @@ import java.util.List;
 
 
 public class Client extends User{
-    private List<String> Rated_over_movie_id;
 
-    public List<String> getRated_over_movie_id() {
-        return Rated_over_movie_id;
+    public Client(String login_name, String real_name, String password, Character gender, String telephone_number, Double account_amount) {
+        this.login_name = login_name;
+        this.real_name = real_name;
+        this.password = password;
+        this.gender = gender;
+        this.telephone_number = telephone_number;
+        this.account_amount = account_amount;
     }
 
-
-    public void setRated_over_movie_id(List<String> rated_over_movie_id) {
-        Rated_over_movie_id = rated_over_movie_id;
-    }
 }
