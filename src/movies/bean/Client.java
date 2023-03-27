@@ -10,6 +10,7 @@ public class Client extends User{
         return Rated_over_movie_id;
     }
 
+
     public void setRated_over_movie_id(List<String> rated_over_movie_id) {
         Rated_over_movie_id = rated_over_movie_id;
     }

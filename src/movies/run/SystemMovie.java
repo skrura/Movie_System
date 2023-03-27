@@ -241,18 +241,19 @@ public class SystemMovie {
 
     //商家菜单
     public static void showBusinessMenu(){
-        System.out.println("===============BusinessMenu====================");
 
-        Business loginUser = (Business) LoginUser;
-        LOGGER.info(loginUser.getReal_name()+"进入商家界面");
-        System.out.println("欢迎"+LoginUser.getReal_name()+"您的商城为"+loginUser.getShop_name());
-        System.out.println("选择需要的功能");
-        System.out.println("1.展示全部影片信息");
-        System.out.println("2.上架电影");
-        System.out.println("3.下架电影");
-        System.out.println("4.修改电影");
-        System.out.println("5.退出");
         while (true){
+            System.out.println("===============BusinessMenu====================");
+
+            Business loginUser = (Business) LoginUser;
+            LOGGER.info(loginUser.getReal_name()+"进入商家界面");
+            System.out.println("欢迎"+LoginUser.getReal_name()+"您的商城为"+loginUser.getShop_name());
+            System.out.println("选择需要的功能");
+            System.out.println("1.展示全部影片信息");
+            System.out.println("2.上架电影");
+            System.out.println("3.下架电影");
+            System.out.println("4.修改电影");
+            System.out.println("5.退出");
             System.out.println("输入需要的功能：");
             String command = SCInput.nextLine();
             switch (command) {
@@ -421,21 +422,74 @@ public class SystemMovie {
         }
     }
     public static void enroll(){
-        System.out.println("==================EnrollMenu===================");
-        System.out.println("1.客户注册");
-        System.out.println("2.商户注册");
         while (true) {
+            System.out.println("==================EnrollMenu===================");
+            System.out.println("1.客户注册");
+            System.out.println("2.商户注册");
+            System.out.println("3.退出");
             System.out.println("输入操作命令: \n");
             String command = SCInput.nextLine();
-            switch (command){
-                case "1": enrollClient(); break;
-                case  "2": enrollBusiness(); break;
-                default:
-                    System.out.println("error command");
+            switch (command) {
+                case "1" -> enrollClient();
+                case "2" -> enrollBusiness();
+                case "3" -> {
+                    return;
+                } default -> System.out.println("error command");
             }
         }
     }
     public static void enrollClient(){
+        String patternLoginName = "\\w{8,}";
+        String patternPassword = "\\w{6,}";
+        String patternSex = "男|女";
+        String patternnumber = "\\d{8,}";
+        while (true) {
+            System.out.println("输入要注册的用户名称(字母下划线组成至少8位)");
+            String loginName = SCInput.nextLine();
+            if(loginName.matches(patternLoginName)){
+                if(getUserByLoginName(loginName)==null){
+                    while (true) {
+                        System.out.println("输入密码(字母下划线组成至少6位)");
+                        String password = SCInput.nextLine();
+                        if(password.matches(patternPassword)){
+                            System.out.println("输入真实姓名");
+                            String realName = SCInput.nextLine();
+                            while (true) {
+                                System.out.println("输入性别");
+                                String sex = SCInput.nextLine();
+                                if(sex.matches(patternSex)){
+                                    Character csex = sex.charAt(0);
+                                    while (true) {
+                                        System.out.println("输入联系号码");
+                                        String number = SCInput.nextLine();
+                                        if(number.matches(patternnumber)){
+                                            System.out.println("充值账户金额");
+                                            String money = SCInput.nextLine();
+                                            User client = new User(loginName,realName,password,csex,number,Double.valueOf(money));
+                                            ALL_USERS.add(client);
+                                            System.out.println("创建"+loginName+"成功");
+                                            return;
+                                        }else {
+                                            System.out.println("号码不符合条件");
+                                        }
+                                    }
+                                }else {
+                                    System.out.println("性别不符合条件");
+                                }
+                            }
+
+                        }else {
+                            System.out.println("密码不符合条件");
+                        }
+                    }
+
+                }else {
+                    System.out.println("登录名称重复");
+                }
+            }else {
+                System.out.println("登录名称不符合条件");
+            }
+        }
 
     }
     public static void enrollBusiness(){
